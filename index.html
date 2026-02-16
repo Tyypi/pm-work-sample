@@ -143,6 +143,10 @@
         }
 
         /* Stakeholder Toggle */
+        .stakeholder-toggle {
+            grid-column: 1 / -1;
+        }
+
         .toggle-arrow {
             font-size: 0.6rem;
             display: inline-block;
@@ -153,43 +157,43 @@
         .stakeholder-detail {
             max-height: 0;
             overflow: hidden;
-            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            transition: max-height 0.4s ease, margin-top 0.3s ease;
             margin-top: 0;
         }
 
         .stakeholder-detail.open {
-            max-height: 400px;
-            margin-top: 0.75rem;
+            max-height: 800px;
+            margin-top: 1rem;
         }
 
-        .stakeholder-detail.open ~ .toggle-arrow,
         .stakeholder-toggle:has(.stakeholder-detail.open) .toggle-arrow {
             transform: rotate(90deg);
         }
 
         .stakeholder-row {
             display: flex;
-            gap: 0.5rem;
-            padding: 0.3rem 0;
-            border-top: 1px solid var(--gray-100);
+            gap: 1rem;
+            padding: 0.5rem 0;
+            border-top: 1px solid var(--gray-200);
             align-items: baseline;
         }
 
         .stakeholder-row:first-child {
             border-top: none;
+            padding-top: 0;
         }
 
         .sh-label {
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 600;
-            color: var(--gray-500);
-            min-width: 140px;
+            color: var(--gray-700);
+            min-width: 180px;
             flex-shrink: 0;
         }
 
         .sh-value {
-            font-size: 0.8rem;
-            color: var(--gray-700);
+            font-size: 0.85rem;
+            color: var(--gray-600);
         }
 
         /* Gantt Chart */
