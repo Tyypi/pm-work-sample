@@ -328,6 +328,16 @@
             font-weight: 600;
             color: var(--gray-900);
             margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .phase-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
         }
 
         .phase-card .meta {
@@ -446,6 +456,105 @@
 
         .outcome-box strong {
             color: var(--gray-900);
+        }
+
+        /* Risk Visual Timeline */
+        .risk-visual {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .risk-timeline-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .risk-event-badge {
+            background: var(--red-100);
+            color: var(--red-500);
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+        }
+
+        .risk-timeline-row {
+            display: flex;
+            gap: 3px;
+            height: 36px;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .risk-timeline-bar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+        }
+
+        .risk-timeline-bar span {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: white;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0 0.4rem;
+        }
+
+        .risk-timeline-bar.planned { background: #06b6d4; }
+        .risk-timeline-bar.planned.post { background: #f97316; }
+        .risk-timeline-bar.planned.platform { background: #10b981; }
+        .risk-timeline-bar.planned.launch { background: #6366f1; }
+
+        .risk-timeline-bar.actual.filming { background: #06b6d4; }
+        .risk-timeline-bar.actual.disruption { background: var(--red-500); }
+        .risk-timeline-bar.actual.mvp { background: #8b5cf6; }
+        .risk-timeline-bar.actual.post { background: #f97316; }
+
+        .risk-timeline-legend {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .legend-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        /* Risk Details Side by Side */
+        .risk-details-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 700px) {
+            .risk-details-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Framework Section */
@@ -830,7 +939,7 @@
         <h2 class="section-title">Phase Details</h2>
         <div class="phase-cards">
             <div class="phase-card" style="border-left-color: #3b82f6;">
-                <h3>Phase 1: Planning & Scoping — Weeks 1–2</h3>
+                <h3><span class="phase-dot" style="background: #3b82f6;"></span>Phase 1: Planning & Scoping — Weeks 1–2</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Dallan</span>
                     <span><strong>Dependencies:</strong> None</span>
@@ -845,7 +954,7 @@
             </div>
 
             <div class="phase-card" style="border-left-color: #8b5cf6;">
-                <h3>Phase 2: Content Development — Weeks 3–6</h3>
+                <h3><span class="phase-dot" style="background: #8b5cf6;"></span>Phase 2: Content Development — Weeks 3–6</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Dallan + Writers</span>
                     <span><strong>Dependencies:</strong> Phase 1 complete, crew hired</span>
@@ -859,7 +968,7 @@
             </div>
 
             <div class="phase-card" style="border-left-color: #06b6d4;">
-                <h3>Phase 3: Filming — Weeks 7–9</h3>
+                <h3><span class="phase-dot" style="background: #06b6d4;"></span>Phase 3: Filming — Weeks 7–9</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Dallan + Reps + Film Crew</span>
                     <span><strong>Dependencies:</strong> Scripts approved, location booked</span>
@@ -872,7 +981,7 @@
             </div>
 
             <div class="phase-card" style="border-left-color: #f97316;">
-                <h3>Phase 4: Post-Production — Weeks 9–12</h3>
+                <h3><span class="phase-dot" style="background: #f97316;"></span>Phase 4: Post-Production — Weeks 9–12</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Editors (managed by Dallan)</span>
                     <span><strong>Dependencies:</strong> Filming complete</span>
@@ -885,7 +994,7 @@
             </div>
 
             <div class="phase-card" style="border-left-color: #10b981;">
-                <h3>Phase 5: Platform Setup & QA — Weeks 11–13</h3>
+                <h3><span class="phase-dot" style="background: #10b981;"></span>Phase 5: Platform Setup & QA — Weeks 11–13</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Dallan</span>
                     <span><strong>Dependencies:</strong> Parallel with Phase 4</span>
@@ -898,7 +1007,7 @@
             </div>
 
             <div class="phase-card" style="border-left-color: #6366f1;">
-                <h3>Phase 6: Launch & Adoption — Week 14</h3>
+                <h3><span class="phase-dot" style="background: #6366f1;"></span>Phase 6: Launch & Adoption — Week 14</h3>
                 <div class="meta">
                     <span><strong>Owner:</strong> Dallan</span>
                     <span><strong>Dependencies:</strong> All phases complete</span>
@@ -913,28 +1022,77 @@
 
         <h2 class="section-title">Risk Event: External System Change (Week 8)</h2>
 
-        <div class="risk-banner">
-            <h3>What Happened</h3>
-            <p>During the filming phase, the external customer sign-up system that sales reps used in the field changed completely. Training content that had already been written, filmed, and entered post-production was now obsolete.</p>
+        <!-- Planned vs Actual Visual Timeline -->
+        <div class="risk-visual">
+            <div class="risk-timeline-label">Planned Timeline</div>
+            <div class="risk-timeline-row">
+                <div class="risk-timeline-bar planned" style="flex: 2;">
+                    <span>Filming</span>
+                </div>
+                <div class="risk-timeline-bar planned post" style="flex: 3;">
+                    <span>Post-Production</span>
+                </div>
+                <div class="risk-timeline-bar planned platform" style="flex: 2;">
+                    <span>Platform & QA</span>
+                </div>
+                <div class="risk-timeline-bar planned launch" style="flex: 1;">
+                    <span>Launch</span>
+                </div>
+            </div>
 
-            <h3 style="margin-top: 1rem;">Cascading Impact</h3>
-            <ul class="impact-list red">
-                <li>Filmed video content for affected modules was unusable</li>
-                <li>Filming location had to be re-booked for an additional day to maintain visual consistency — adding unplanned cost and scheduling pressure</li>
-                <li>Head salesperson needed field time to learn the new system before new content could be created</li>
-                <li>All rework had to happen within the remaining project window</li>
-            </ul>
+            <div class="risk-timeline-label" style="margin-top: 1rem;">
+                Actual Timeline
+                <span class="risk-event-badge">System changed at Week 8</span>
+            </div>
+            <div class="risk-timeline-row">
+                <div class="risk-timeline-bar actual filming" style="flex: 1.5;">
+                    <span>Filming</span>
+                </div>
+                <div class="risk-timeline-bar actual disruption" style="flex: 1;">
+                    <span>Rework</span>
+                </div>
+                <div class="risk-timeline-bar actual mvp" style="flex: 1.5;">
+                    <span>MVP Shipped</span>
+                </div>
+                <div class="risk-timeline-bar actual post" style="flex: 2;">
+                    <span>Re-film + Edit</span>
+                </div>
+                <div class="risk-timeline-bar planned platform" style="flex: 1;">
+                    <span>QA</span>
+                </div>
+                <div class="risk-timeline-bar planned launch" style="flex: 0.7;">
+                    <span>Launch</span>
+                </div>
+            </div>
+
+            <div class="risk-timeline-legend">
+                <span class="legend-item"><span class="legend-dot" style="background: var(--red-500);"></span> Disruption & rework</span>
+                <span class="legend-item"><span class="legend-dot" style="background: #8b5cf6;"></span> MVP pivot — protected launch date</span>
+                <span class="legend-item"><span class="legend-dot" style="background: var(--green-600);"></span> Full version delivered 1 week post-launch</span>
+            </div>
         </div>
 
-        <div class="response-card">
-            <h3>Risk Response</h3>
-            <ul class="impact-list green">
-                <li><strong>Assessed blast radius</strong> — identified exactly which modules were affected vs. untouched</li>
-                <li><strong>Shipped an MVP</strong> — created a voiceover screen-walkthrough as interim training, protecting the launch date</li>
-                <li><strong>Re-booked the location</strong> — secured the same filming space to maintain visual consistency</li>
-                <li><strong>Overtime + knowledge building</strong> — head salesperson field-tested the new system; team worked overtime to produce new content</li>
-                <li><strong>Negotiated a 1-week extension</strong> — for the full polished version only</li>
-            </ul>
+        <div class="risk-details-grid">
+            <div class="risk-banner">
+                <h3>Cascading Impact</h3>
+                <ul class="impact-list red">
+                    <li>Filmed video content for affected modules was unusable</li>
+                    <li>Filming location had to be re-booked — added unplanned cost and scheduling pressure</li>
+                    <li>Head salesperson needed field time to learn the new system first</li>
+                    <li>All rework had to happen within the remaining project window</li>
+                </ul>
+            </div>
+
+            <div class="response-card">
+                <h3>Risk Response</h3>
+                <ul class="impact-list green">
+                    <li><strong>Assessed blast radius</strong> — isolated affected vs. untouched modules</li>
+                    <li><strong>Shipped an MVP</strong> — voiceover walkthrough protected the launch date</li>
+                    <li><strong>Re-booked the location</strong> — same space for visual consistency</li>
+                    <li><strong>Overtime</strong> — head salesperson field-tested; team rebuilt content</li>
+                    <li><strong>Negotiated 1-week extension</strong> — for polished version only</li>
+                </ul>
+            </div>
         </div>
 
         <div class="outcome-box">
