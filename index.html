@@ -142,6 +142,56 @@
             color: var(--gray-900);
         }
 
+        /* Stakeholder Toggle */
+        .toggle-arrow {
+            font-size: 0.6rem;
+            display: inline-block;
+            transition: transform 0.2s;
+            margin-left: 0.25rem;
+        }
+
+        .stakeholder-detail {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, margin-top 0.3s ease;
+            margin-top: 0;
+        }
+
+        .stakeholder-detail.open {
+            max-height: 400px;
+            margin-top: 0.75rem;
+        }
+
+        .stakeholder-detail.open ~ .toggle-arrow,
+        .stakeholder-toggle:has(.stakeholder-detail.open) .toggle-arrow {
+            transform: rotate(90deg);
+        }
+
+        .stakeholder-row {
+            display: flex;
+            gap: 0.5rem;
+            padding: 0.3rem 0;
+            border-top: 1px solid var(--gray-100);
+            align-items: baseline;
+        }
+
+        .stakeholder-row:first-child {
+            border-top: none;
+        }
+
+        .sh-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            min-width: 140px;
+            flex-shrink: 0;
+        }
+
+        .sh-value {
+            font-size: 0.8rem;
+            color: var(--gray-700);
+        }
+
         /* Gantt Chart */
         .gantt-container {
             background: var(--white);
@@ -657,37 +707,17 @@
                 <div class="label">Project Lead</div>
                 <div class="value">Dallan Wright</div>
             </div>
-            <div class="overview-card">
-                <div class="label">Stakeholders</div>
+            <div class="overview-card stakeholder-toggle" onclick="document.getElementById('stakeholder-detail').classList.toggle('open')" style="cursor: pointer;">
+                <div class="label">Stakeholders <span class="toggle-arrow" id="stakeholder-arrow">&#9654;</span></div>
                 <div class="value">6 groups (internal + external)</div>
-            </div>
-        </div>
-
-        <h2 class="section-title">Stakeholders</h2>
-        <div class="overview-grid">
-            <div class="overview-card">
-                <div class="label">Project Lead</div>
-                <div class="value">Dallan Wright — end-to-end ownership, timeline, scope, vendor management</div>
-            </div>
-            <div class="overview-card">
-                <div class="label">Leadership</div>
-                <div class="value">Content review, curriculum sign-off, approval gate</div>
-            </div>
-            <div class="overview-card">
-                <div class="label">Head Salesperson & Top Reps</div>
-                <div class="value">Subject matter experts and on-camera presenters</div>
-            </div>
-            <div class="overview-card">
-                <div class="label">Film Crew (External)</div>
-                <div class="value">Hired vendor — video production, lighting, audio</div>
-            </div>
-            <div class="overview-card">
-                <div class="label">Editors (External)</div>
-                <div class="value">Hired vendor — post-production, graphics, polish</div>
-            </div>
-            <div class="overview-card">
-                <div class="label">New Rep Cohort</div>
-                <div class="value">End users — the onboarding class the system was built for</div>
+                <div class="stakeholder-detail" id="stakeholder-detail">
+                    <div class="stakeholder-row"><span class="sh-label">Project Lead</span><span class="sh-value">Dallan Wright — end-to-end ownership, timeline, scope, vendor management</span></div>
+                    <div class="stakeholder-row"><span class="sh-label">Leadership</span><span class="sh-value">Content review, curriculum sign-off, approval gate</span></div>
+                    <div class="stakeholder-row"><span class="sh-label">Head Salesperson & Top Reps</span><span class="sh-value">Subject matter experts and on-camera presenters</span></div>
+                    <div class="stakeholder-row"><span class="sh-label">Film Crew (External)</span><span class="sh-value">Hired vendor — video production, lighting, audio</span></div>
+                    <div class="stakeholder-row"><span class="sh-label">Editors (External)</span><span class="sh-value">Hired vendor — post-production, graphics, polish</span></div>
+                    <div class="stakeholder-row"><span class="sh-label">New Rep Cohort</span><span class="sh-value">End users — the onboarding class the system was built for</span></div>
+                </div>
             </div>
         </div>
 
