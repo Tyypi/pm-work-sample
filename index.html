@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PM Work Sample — Dallan Wright</title>
+    <style>
+        :root {
+            --blue-900: #1a2332;
+            --blue-800: #1e3a5f;
+            --blue-700: #2563eb;
+            --blue-600: #3b82f6;
+            --blue-100: #dbeafe;
+            --blue-50: #eff6ff;
+            --gray-900: #111827;
+            --gray-700: #374151;
+            --gray-600: #4b5563;
+            --gray-500: #6b7280;
+            --gray-400: #9ca3af;
+            --gray-200: #e5e7eb;
+            --gray-100: #f3f4f6;
+            --gray-50: #f9fafb;
+            --amber-500: #f59e0b;
+            --amber-100: #fef3c7;
+            --amber-50: #fffbeb;
+            --red-500: #ef4444;
+            --red-100: #fee2e2;
+            --green-600: #16a34a;
+            --green-100: #dcfce7;
+            --white: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            color: var(--gray-900);
+            background: var(--gray-50);
+            line-height: 1.6;
+        }
+
+        /* Header */
+        .header {
+            background: var(--blue-900);
+            color: var(--white);
+            padding: 2rem 2rem 0;
+        }
+
+        .header-content {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0;
+            margin-top: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--gray-400);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .tab:hover { color: var(--gray-200); }
+
+        .tab.active {
+            color: var(--white);
+            border-bottom-color: var(--blue-600);
+            background: rgba(255,255,255,0.05);
+        }
+
+        /* Main Content */
+        .main {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* Section Headers */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin: 2rem 0 1rem;
+            letter-spacing: -0.01em;
+        }
+
+        .section-title:first-child { margin-top: 0; }
+
+        /* Overview Cards */
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .overview-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+        }
+
+        .overview-card .label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--gray-500);
+            margin-bottom: 0.25rem;
+        }
+
+        .overview-card .value {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        /* Gantt Chart */
+        .gantt-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            overflow-x: auto;
+            margin-bottom: 2rem;
+        }
+
+        .gantt-header {
+            display: grid;
+            grid-template-columns: 200px repeat(14, 1fr);
+            gap: 0;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .gantt-header .week-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-align: center;
+        }
+
+        .gantt-header .phase-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--gray-500);
+        }
+
+        .gantt-row {
+            display: grid;
+            grid-template-columns: 200px repeat(14, 1fr);
+            gap: 0;
+            align-items: center;
+            padding: 0.4rem 0;
+        }
+
+        .gantt-phase-name {
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--gray-700);
+            padding-right: 1rem;
+        }
+
+        .gantt-bar-container {
+            position: relative;
+            height: 28px;
+        }
+
+        .gantt-bar {
+            position: absolute;
+            height: 28px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--white);
+        }
+
+        .bar-phase1 { background: #3b82f6; }
+        .bar-phase2 { background: #8b5cf6; }
+        .bar-phase3 { background: #06b6d4; }
+        .bar-phase4 { background: #f97316; }
+        .bar-phase5 { background: #10b981; }
+        .bar-phase6 { background: #6366f1; }
+
+        /* Risk Marker */
+        .gantt-risk-row {
+            display: grid;
+            grid-template-columns: 200px repeat(14, 1fr);
+            gap: 0;
+            align-items: center;
+            padding: 0.5rem 0;
+            margin-top: 0.25rem;
+            border-top: 1px dashed var(--gray-200);
+        }
+
+        .risk-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-icon {
+            background: var(--red-500);
+            color: white;
+            font-size: 0.65rem;
+            font-weight: 700;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .risk-label {
+            font-size: 0.75rem;
+            color: var(--red-500);
+            font-weight: 600;
+        }
+
+        /* Phase Detail Cards */
+        .phase-cards {
+            display: grid;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .phase-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            border-left: 4px solid var(--blue-600);
+            padding: 1.25rem 1.5rem;
+        }
+
+        .phase-card.risk-card {
+            border-left-color: var(--red-500);
+            background: #fef9f9;
+        }
+
+        .phase-card h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .phase-card .meta {
+            display: flex;
+            gap: 1.5rem;
+            margin-bottom: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .phase-card .meta span {
+            font-size: 0.8rem;
+            color: var(--gray-500);
+        }
+
+        .phase-card .meta strong {
+            color: var(--gray-700);
+        }
+
+        .phase-card ul {
+            margin: 0;
+            padding-left: 1.25rem;
+        }
+
+        .phase-card li {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            margin-bottom: 0.25rem;
+        }
+
+        .dep-tag {
+            display: inline-block;
+            background: var(--blue-50);
+            color: var(--blue-700);
+            font-size: 0.7rem;
+            font-weight: 500;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            margin-top: 0.5rem;
+        }
+
+        /* Risk Section */
+        .risk-banner {
+            background: var(--amber-50);
+            border: 1px solid var(--amber-500);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .risk-banner h3 {
+            color: var(--gray-900);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .risk-banner p {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            margin-bottom: 0.5rem;
+        }
+
+        .impact-list {
+            list-style: none;
+            padding: 0;
+            margin: 0.75rem 0;
+        }
+
+        .impact-list li {
+            font-size: 0.85rem;
+            color: var(--gray-700);
+            padding: 0.35rem 0 0.35rem 1.5rem;
+            position: relative;
+        }
+
+        .impact-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0.65rem;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .impact-list.red li::before { background: var(--red-500); }
+        .impact-list.green li::before { background: var(--green-600); }
+
+        .response-card {
+            background: var(--green-100);
+            border: 1px solid var(--green-600);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .response-card h3 {
+            color: var(--gray-900);
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .outcome-box {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .outcome-box p {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+        }
+
+        .outcome-box strong {
+            color: var(--gray-900);
+        }
+
+        /* Framework Section */
+        .framework-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .framework-step {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .framework-step .step-num {
+            display: inline-block;
+            background: var(--blue-700);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-align: center;
+            line-height: 24px;
+            margin-bottom: 0.5rem;
+        }
+
+        .framework-step h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.35rem;
+        }
+
+        .framework-step p {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        /* Critical Path */
+        .critical-path {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .path-flow {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 0.75rem;
+        }
+
+        .path-node {
+            background: var(--blue-100);
+            color: var(--blue-800);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .path-arrow {
+            color: var(--gray-400);
+            font-size: 1.1rem;
+        }
+
+        /* Email Tab */
+        .email-intro {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .email-intro h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.5rem;
+        }
+
+        .email-intro p {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .email-intro ul {
+            padding-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .email-intro li {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+            margin-bottom: 0.2rem;
+        }
+
+        .email-container {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 2rem;
+            max-width: 750px;
+        }
+
+        .email-header-bar {
+            background: var(--gray-100);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 1rem 1.5rem;
+        }
+
+        .email-field {
+            display: flex;
+            gap: 0.75rem;
+            align-items: baseline;
+            margin-bottom: 0.3rem;
+        }
+
+        .email-field:last-child { margin-bottom: 0; }
+
+        .email-field .field-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            min-width: 55px;
+        }
+
+        .email-field .field-value {
+            font-size: 0.85rem;
+            color: var(--gray-900);
+        }
+
+        .email-body {
+            padding: 1.5rem 1.5rem 2rem;
+        }
+
+        .email-body p {
+            font-size: 0.9rem;
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            line-height: 1.65;
+        }
+
+        .email-body p:last-child { margin-bottom: 0; }
+
+        .email-body strong {
+            color: var(--gray-900);
+        }
+
+        .email-body .email-heading {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 0.35rem;
+        }
+
+        .email-signature {
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .email-signature p {
+            margin-bottom: 0.1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Principles Grid */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .principle-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 1.25rem;
+        }
+
+        .principle-card h4 {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--blue-700);
+            margin-bottom: 0.35rem;
+        }
+
+        .principle-card p {
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--gray-400);
+            font-size: 0.75rem;
+        }
+
+        /* Print styles */
+        @media print {
+            .header { padding: 1rem 1rem 0; }
+            .tabs { display: none; }
+            .main { padding: 1rem; }
+            .tab-content { display: block !important; page-break-before: always; }
+            .tab-content:first-child { page-break-before: auto; }
+            .gantt-container { overflow: visible; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-content">
+        <h1>Project Manager — Work Sample</h1>
+        <p>Dallan Wright</p>
+        <div class="tabs">
+            <button class="tab active" data-tab="project-plan">Project Plan</button>
+            <button class="tab" data-tab="client-email">Client Email</button>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+
+    <!-- ==================== PROJECT PLAN TAB ==================== -->
+    <div id="project-plan" class="tab-content active">
+
+        <h2 class="section-title">Project Overview</h2>
+        <div class="overview-grid">
+            <div class="overview-card">
+                <div class="label">Project</div>
+                <div class="value">Sales Rep Training System</div>
+            </div>
+            <div class="overview-card">
+                <div class="label">Organization</div>
+                <div class="value">GEN Marketing</div>
+            </div>
+            <div class="overview-card">
+                <div class="label">Duration</div>
+                <div class="value">14 Weeks</div>
+            </div>
+            <div class="overview-card">
+                <div class="label">Deadline</div>
+                <div class="value">Hard — Onboarding Cohort</div>
+            </div>
+            <div class="overview-card">
+                <div class="label">Project Lead</div>
+                <div class="value">Dallan Wright</div>
+            </div>
+            <div class="overview-card">
+                <div class="label">Stakeholders</div>
+                <div class="value">6 groups (internal + external)</div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Project Timeline</h2>
+        <div class="gantt-container">
+            <div class="gantt-header">
+                <div class="phase-label">Phase</div>
+                <div class="week-label">1</div>
+                <div class="week-label">2</div>
+                <div class="week-label">3</div>
+                <div class="week-label">4</div>
+                <div class="week-label">5</div>
+                <div class="week-label">6</div>
+                <div class="week-label">7</div>
+                <div class="week-label">8</div>
+                <div class="week-label">9</div>
+                <div class="week-label">10</div>
+                <div class="week-label">11</div>
+                <div class="week-label">12</div>
+                <div class="week-label">13</div>
+                <div class="week-label">14</div>
+            </div>
+
+            <!-- Phase 1: Weeks 1-2 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">1. Planning & Scoping</div>
+                <div class="gantt-bar-container" style="grid-column: 2 / 4;">
+                    <div class="gantt-bar bar-phase1" style="width: 100%; left: 0;">Wk 1–2</div>
+                </div>
+            </div>
+
+            <!-- Phase 2: Weeks 3-6 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">2. Content Development</div>
+                <div style="grid-column: 2 / 4;"></div>
+                <div class="gantt-bar-container" style="grid-column: 4 / 8;">
+                    <div class="gantt-bar bar-phase2" style="width: 100%; left: 0;">Wk 3–6</div>
+                </div>
+            </div>
+
+            <!-- Phase 3: Weeks 7-9 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">3. Filming</div>
+                <div style="grid-column: 2 / 8;"></div>
+                <div class="gantt-bar-container" style="grid-column: 8 / 11;">
+                    <div class="gantt-bar bar-phase3" style="width: 100%; left: 0;">Wk 7–9</div>
+                </div>
+            </div>
+
+            <!-- Phase 4: Weeks 9-12 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">4. Post-Production</div>
+                <div style="grid-column: 2 / 10;"></div>
+                <div class="gantt-bar-container" style="grid-column: 10 / 14;">
+                    <div class="gantt-bar bar-phase4" style="width: 100%; left: 0;">Wk 9–12</div>
+                </div>
+            </div>
+
+            <!-- Phase 5: Weeks 11-13 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">5. Platform Setup & QA</div>
+                <div style="grid-column: 2 / 12;"></div>
+                <div class="gantt-bar-container" style="grid-column: 12 / 15;">
+                    <div class="gantt-bar bar-phase5" style="width: 100%; left: 0;">Wk 11–13</div>
+                </div>
+            </div>
+
+            <!-- Phase 6: Week 14 -->
+            <div class="gantt-row">
+                <div class="gantt-phase-name">6. Launch & Adoption</div>
+                <div style="grid-column: 2 / 15;"></div>
+                <div class="gantt-bar-container" style="grid-column: 15 / 16;">
+                    <div class="gantt-bar bar-phase6" style="width: 100%; left: 0;">14</div>
+                </div>
+            </div>
+
+            <!-- Risk Event Marker -->
+            <div class="gantt-risk-row">
+                <div class="risk-label">RISK EVENT</div>
+                <div style="grid-column: 2 / 9;"></div>
+                <div class="risk-marker" style="grid-column: 9 / 10;">
+                    <div class="risk-icon">!</div>
+                </div>
+                <div style="grid-column: 10 / 16; font-size: 0.75rem; color: var(--red-500);">
+                    Sign-up system changed — content rework required
+                </div>
+            </div>
+        </div>
+
+        <h2 class="section-title">Critical Path</h2>
+        <div class="critical-path">
+            <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.75rem;">Any delay on this chain directly threatens the launch date:</p>
+            <div class="path-flow">
+                <span class="path-node">Scripts Approved</span>
+                <span class="path-arrow">&rarr;</span>
+                <span class="path-node">Filming Complete</span>
+                <span class="path-arrow">&rarr;</span>
+                <span class="path-node">Editing Complete</span>
+                <span class="path-arrow">&rarr;</span>
+                <span class="path-node">Platform Loaded</span>
+                <span class="path-arrow">&rarr;</span>
+                <span class="path-node">Launch</span>
+            </div>
+        </div>
+
+        <h2 class="section-title">Phase Details</h2>
+        <div class="phase-cards">
+            <div class="phase-card" style="border-left-color: #3b82f6;">
+                <h3>Phase 1: Planning & Scoping — Weeks 1–2</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Dallan</span>
+                    <span><strong>Dependencies:</strong> None</span>
+                </div>
+                <ul>
+                    <li>Define training modules and curriculum structure</li>
+                    <li>Identify subject matter experts (top-performing reps)</li>
+                    <li>Evaluate and select video hosting platform</li>
+                    <li>Source, vet, and hire external film crew and editors</li>
+                    <li>Scout and secure filming location (rental agreement, scheduling)</li>
+                </ul>
+            </div>
+
+            <div class="phase-card" style="border-left-color: #8b5cf6;">
+                <h3>Phase 2: Content Development — Weeks 3–6</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Dallan + Writers</span>
+                    <span><strong>Dependencies:</strong> Phase 1 complete, crew hired</span>
+                </div>
+                <ul>
+                    <li>Write full training manual</li>
+                    <li>Develop video scripts for each training module</li>
+                    <li>Leadership review and approval cycles</li>
+                    <li>Onboard film crew on project scope and schedule</li>
+                </ul>
+            </div>
+
+            <div class="phase-card" style="border-left-color: #06b6d4;">
+                <h3>Phase 3: Filming — Weeks 7–9</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Dallan + Reps + Film Crew</span>
+                    <span><strong>Dependencies:</strong> Scripts approved, location booked</span>
+                </div>
+                <ul>
+                    <li>Coordinate rep availability around sales schedules</li>
+                    <li>Film each training module at secured location</li>
+                    <li>Capture field demos and system walkthroughs</li>
+                </ul>
+            </div>
+
+            <div class="phase-card" style="border-left-color: #f97316;">
+                <h3>Phase 4: Post-Production — Weeks 9–12</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Editors (managed by Dallan)</span>
+                    <span><strong>Dependencies:</strong> Filming complete</span>
+                </div>
+                <ul>
+                    <li>Edit and arrange all footage</li>
+                    <li>Add titles, graphics, and branding overlays</li>
+                    <li>Internal review and revision cycles</li>
+                </ul>
+            </div>
+
+            <div class="phase-card" style="border-left-color: #10b981;">
+                <h3>Phase 5: Platform Setup & QA — Weeks 11–13</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Dallan</span>
+                    <span><strong>Dependencies:</strong> Parallel with Phase 4</span>
+                </div>
+                <ul>
+                    <li>Configure hosting platform structure</li>
+                    <li>Upload videos and materials as they finalize</li>
+                    <li>Test rep access, navigation, and playback</li>
+                </ul>
+            </div>
+
+            <div class="phase-card" style="border-left-color: #6366f1;">
+                <h3>Phase 6: Launch & Adoption — Week 14</h3>
+                <div class="meta">
+                    <span><strong>Owner:</strong> Dallan</span>
+                    <span><strong>Dependencies:</strong> All phases complete</span>
+                </div>
+                <ul>
+                    <li>Roll out access to onboarding cohort</li>
+                    <li>Monitor usage and troubleshoot issues</li>
+                    <li>Gather feedback for future iterations</li>
+                </ul>
+            </div>
+        </div>
+
+        <h2 class="section-title">Risk Event: External System Change (Week 8)</h2>
+
+        <div class="risk-banner">
+            <h3>What Happened</h3>
+            <p>During the filming phase, the external customer sign-up system that sales reps used in the field changed completely. Training content that had already been written, filmed, and entered post-production was now obsolete.</p>
+
+            <h3 style="margin-top: 1rem;">Cascading Impact</h3>
+            <ul class="impact-list red">
+                <li>Filmed video content for affected modules was unusable</li>
+                <li>Filming location had to be re-booked for an additional day to maintain visual consistency — adding unplanned cost and scheduling pressure</li>
+                <li>Head salesperson needed field time to learn the new system before new content could be created</li>
+                <li>All rework had to happen within the remaining project window</li>
+            </ul>
+        </div>
+
+        <div class="response-card">
+            <h3>Risk Response</h3>
+            <ul class="impact-list green">
+                <li><strong>Assessed blast radius</strong> — identified exactly which modules were affected vs. untouched</li>
+                <li><strong>Shipped an MVP</strong> — created a voiceover screen-walkthrough as interim training, protecting the launch date</li>
+                <li><strong>Re-booked the location</strong> — secured the same filming space to maintain visual consistency</li>
+                <li><strong>Overtime + knowledge building</strong> — head salesperson field-tested the new system; team worked overtime to produce new content</li>
+                <li><strong>Negotiated a 1-week extension</strong> — for the full polished version only</li>
+            </ul>
+        </div>
+
+        <div class="outcome-box">
+            <p><strong>Outcome:</strong> The onboarding cohort launched <strong>on schedule</strong> with the MVP voiceover walkthrough. The full polished version was delivered <strong>one week later</strong>, maintaining quality standards without sacrificing the hard deadline.</p>
+        </div>
+
+        <h2 class="section-title">Risk Management Framework</h2>
+        <p style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 1rem;">How I approach any new risk introduced to a project:</p>
+        <div class="framework-steps">
+            <div class="framework-step">
+                <div class="step-num">1</div>
+                <h4>Assess Critical Path</h4>
+                <p>Does this risk affect the launch date? What's the blast radius across workstreams?</p>
+            </div>
+            <div class="framework-step">
+                <div class="step-num">2</div>
+                <h4>Identify Recovery Options</h4>
+                <p>Fast-track, MVP/phase, add resources, or trade scope elsewhere to absorb the impact.</p>
+            </div>
+            <div class="framework-step">
+                <div class="step-num">3</div>
+                <h4>Communicate Transparently</h4>
+                <p>Present the risk, impact, and recommended response together. No surprises.</p>
+            </div>
+            <div class="framework-step">
+                <div class="step-num">4</div>
+                <h4>Protect the Date</h4>
+                <p>The launch date is the anchor. Flex scope or resources — never the deadline.</p>
+            </div>
+            <div class="framework-step">
+                <div class="step-num">5</div>
+                <h4>Document & Adapt</h4>
+                <p>Update the plan, log the decision, and communicate revised expectations.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- ==================== CLIENT EMAIL TAB ==================== -->
+    <div id="client-email" class="tab-content">
+
+        <div class="email-container">
+            <div class="email-header-bar">
+                <div class="email-field">
+                    <span class="field-label">To</span>
+                    <span class="field-value">[Client Name]</span>
+                </div>
+                <div class="email-field">
+                    <span class="field-label">From</span>
+                    <span class="field-value">Dallan Wright</span>
+                </div>
+                <div class="email-field">
+                    <span class="field-label">Subject</span>
+                    <span class="field-value">Re: Additional Registration Features — Thoughts & Recommended Approach</span>
+                </div>
+            </div>
+            <div class="email-body">
+                <p>Hi [Client Name],</p>
+
+                <p>Thanks for sending these over — there are some really good ideas in here, and I can see how they'd strengthen the attendee experience. We've had a great six months on this project, and I want to make sure we keep that momentum going into a strong launch.</p>
+
+                <p>That said, I do want to be upfront about where we are on timing. With Registration launch three weeks out, making changes to the workflow at this point does carry some risk to our go-live date. I want to make sure we're being smart about what we take on so registration opens smoothly — I know how important that date is for your team.</p>
+
+                <p>I took an initial look at your requests and here's how I'd break them down:</p>
+
+                <p class="email-heading">In-Scope Adjustments</p>
+                <p>These fall within our current scope. I'll work with the team to assess which ones we can safely get in before launch without putting the timeline at risk.</p>
+
+                <p class="email-heading">Additional Features</p>
+                <p>A few of these go beyond what we originally scoped. They're definitely things we can do — we'd just need to scope them out separately so we can plan the work and timing properly.</p>
+
+                <p>Here's what I'd recommend:</p>
+
+                <p>Phase 1 — Pre-Launch: We get in any low-risk, in-scope changes that the team confirms we can complete and test before launch. The go-live date stays locked.</p>
+
+                <p>Phase 2 — Post-Launch Enhancements: We take the bigger items and the out-of-scope features and plan them as a fast follow after Registration is live and stable. Honestly, this is a better approach anyway — we'll have real data and feedback from launch to make those enhancements even stronger.</p>
+
+                <p>Can we grab a call this week to walk through these together? I'd like to go request by request with you, figure out the right priority order, and lock in what goes into Phase 1. Would Thursday at 2 PM or Friday at 10 AM work for you?</p>
+
+                <p>Looking forward to it — we're in great shape for a strong launch.</p>
+
+                <div class="email-signature">
+                    <p><strong>Best,</strong></p>
+                    <p><strong>Dallan Wright</strong></p>
+                    <p>Project Manager</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="footer">
+    Dallan Wright — PM Work Sample
+</div>
+
+<script>
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            tab.classList.add('active');
+            document.getElementById(tab.dataset.tab).classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
